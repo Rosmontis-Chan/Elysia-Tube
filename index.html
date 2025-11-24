@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penyimpanan Cloud - Upload File</title>
+    <style>
+        /* CSS untuk tampilan dasar, diinjeksi langsung ke HTML */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .header {
+            color: #007bff; /* Biru seperti identitas layanan cloud */
+            margin-bottom: 20px;
+        }
+
+        .upload-area {
+            border: 3px dashed #007bff;
+            border-radius: 10px;
+            padding: 40px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background-color: #e6f0ff;
+        }
+
+        .upload-icon {
+            font-size: 50px;
+            color: #007bff;
+        }
+
+        .upload-text {
+            margin-top: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .upload-subtext {
+            font-size: 0.9em;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Tombol dan Input disembunyikan */
+        #fileInput {
+            display: none;
+        }
+
+        .account-info {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 0.9em;
+        }
+
+        .login-btn {
+            background-color: #28a745; /* Tombol hijau untuk login/akun */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 class="header">🚀 Penyimpanan Cloud Saya</h2>
+
+        <div class="upload-area" onclick="document.getElementById('fileInput').click();">
+            <span class="upload-icon">⬆️</span>
+            <div class="upload-text">Klik atau Seret File Anda Di Sini</div>
+            <div class="upload-subtext">Maksimal 100MB (Simulasi)</div>
+            <input type="file" id="fileInput">
+        </div>
+
+        <div class="account-info">
+            <p>Untuk fitur penyimpanan dan akun yang sebenarnya, diperlukan Server Backend.</p>
+            <a href="#" class="login-btn">Masuk / Daftar Akun (Simulasi)</a>
+        </div>
+    </div>
+
+</body>
+</html>
