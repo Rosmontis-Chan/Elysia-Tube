@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💖 Kawaii Video Downloader ✨</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS Kustom untuk Efek Kawaii & Kecerahan */
+        body {
+            font-family: sans-serif;
+        }
+        .bg-gradient-kawaii {
+            /* Hijau pastel lembut, mirip latar belakang gambar */
+            background: linear-gradient(to bottom right, #eaf9eb, #ffffff);
+        }
+        .text-pink-kawaii {
+            color: #ff85a2; 
+        }
+        .drop-shadow-kawaii {
+            /* Bayangan lembut untuk efek glowing */
+            filter: drop-shadow(0 3px 6px rgba(144, 238, 144, 0.5)); 
+        }
+        .main-card {
+            border: 2px solid #b3e6b3; /* Garis hijau lembut di sekeliling card utama */
+        }
+        
+        /* Input dan Tombol */
+        .input-ribbon::after {
+            content: '🎀'; /* Pita di input */
+            position: absolute;
+            right: 1.5rem; 
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            z-index: 10;
+        }
+        .download-button {
+            /* Warna hijau tombol Download */
+            background-color: #79d279; 
+            box-shadow: 0 4px 8px rgba(121, 210, 121, 0.4);
+        }
+        .download-button:hover {
+            background-color: #61c461;
+        }
+
+        /* Animasi Kustom */
+        .animate-pulse-slow { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
+        @keyframes fade-in {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-kawaii min-h-screen flex flex-col items-center justify-center p-4">
+
+    <header class="mb-8 text-center">
+        <h1 class="text-5xl font-extrabold text-pink-kawaii drop-shadow-kawaii">
+            💖 Kawaii Video Downloader ✨
+        </h1>
+    </header>
+
+    <main class="bg-white p-6 rounded-2xl shadow-xl main-card w-full max-w-2xl">
+        
+        <div id="formArea" class="p-4 rounded-xl mb-4">
+            <h2 class="text-gray-600 font-semibold mb-3">Form. Downloadg</h2>
+            <form id="downloadForm" class="flex flex-col sm:flex-row gap-4 items-center">
+                
+                <div class="relative flex-grow input-ribbon w-full">
+                    <input
+                        type="url"
+                        id="videoUrl"
+                        class="w-full p-3 rounded-xl border border-green-300 focus:border-green-500 outline-none text-gray-700 shadow-inner-sm"
+                        placeholder="Tempel URL Video Di Sini..."
+                        required
+                    />
+                </div>
+                
+                <button
+                    type="submit"
+                    id="downloadButton"
+                    class="download-button text-white font-bold py-3 px-6 rounded-xl transform transition-all duration-200 flex items-center justify-center space-x-1 whitespace-nowrap"
+                >
+                    Download ✨
+                </button>
+            </form>
+        </div>
+
+        <div id="loadingState" class="text-center my-6 animate-fade-in hidden">
+            <img src="https://media.giphy.com/media/efNqG3K4t3O5h3eF4A/giphy.gif" 
+                 alt="Cute Bear Loading" 
+                 class="mx-auto w-20 h-20 object-contain" />
+            <p class="text-red-500 mt-2 text-md font-semibold animate-pulse-slow">
+                Beruang lucu sedang werbeika kars... ~_~/
+            </p>
+        </div>
+
+        <div id="errorState" class="bg-red-100 border border-red-300 text-red-700 p-3 rounded-lg flex items-center space-x-3 shadow-md my-4 hidden">
+            <span role="img" aria-label="error" class="text-2xl">😡</span>
+            <p id="errorMessage" class="font-medium text-sm"></p>
+        </div>
+
+        <div id="videoResult" class="mt-4 bg-gray-50 p-4 rounded-xl border border-green-200 hidden animate-fade-in">
+            
+            <div class="flex flex-col md:flex-row items-start space-y-3 md:space-y-0 md:space-x-4 mb-4">
+                <img id="videoThumbnail" src="" alt="Video Thumbnail" class="w-32 h-auto rounded-lg shadow-md border border-green-100 object-cover" />
+                
+                <div>
+                    <h3 id="videoTitle" class="text-xl font-bold text-green-700 mb-2"></h3>
+                    <div id="smallButtons" class="flex space-x-2">
+                        </div>
+                </div>
+            </div>
+
+            <h4 class="text-gray-600 font-semibold mt-4 mb-2">mt. 24 Formats Title</h4>
+            <div id="downloadFormats" class="space-y-2">
+                </div>
+        </div>
+    </main>
+
+    <footer class="mt-6 text-gray-500 text-center text-sm">
+        <p>mt: 12 Dibuat dengan cinta fekuk video mitee kawaii! 🌸</p>
+    </footer>
+
+    <script>
+        // =========================================================================
+        // !!! API KEY LANGSUNG DI FRONTEND (UNTUK UJI COBA SAJA) !!!
+        // =========================================================================
+        const RAPIDAPI_KEY = "I9JU23NF394R6HH"; 
+        const RAPIDAPI_HOST = "social-media-downloader-api.p.rapidapi.com"; 
+        
+        // Ganti dengan endpoint RapidAPI yang Anda pilih untuk mendukung SEMUA media sosial
+        const RAPIDAPI_ENDPOINT = "https://social-media-downloader-api.p.rapidapi.com/api/get_info"; 
+
+        // DOM Elements
+        const downloadForm = document.getElementById('downloadForm');
+        const videoUrlInput = document.getElementById('videoUrl');
+        const downloadButton = document.getElementById('downloadButton');
+        const loadingState = document.getElementById('loadingState');
+        const errorState = document.getElementById('errorState');
+        const errorMessage = document.getElementById('errorMessage');
+        const videoResult = document.getElementById('videoResult');
+        const videoThumbnail = document.getElementById('videoThumbnail');
+        const videoTitle = document.getElementById('videoTitle');
+        const smallButtons = document.getElementById('smallButtons');
+        const downloadFormats = document.getElementById('downloadFormats');
+
+        // Fungsi Helper untuk Membuat Tombol Format Download
+        function createDownloadButton(label, url) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.className = 'bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-3 rounded-lg shadow-md flex items-center justify-between transition-colors duration-200 text-sm';
+            link.innerHTML = `
+                <span class="flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L10 11.586l1.293-1.293a1 1 0 011.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>${label}</span>
+                </span>
+                <span class="text-xl pl-2">></span>
+            `;
+            return link;
+        }
+
+        downloadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const url = videoUrlInput.value;
+
+            // Reset UI
+            loadingState.classList.add('hidden');
+            errorState.classList.add('hidden');
+            videoResult.classList.add('hidden');
+            downloadFormats.innerHTML = '';
+            smallButtons.innerHTML = '';
+            
+            // Tampilkan Loading
+            loadingState.classList.remove('hidden');
+            downloadButton.disabled = true;
+            downloadButton.innerHTML = 'Download...';
+            
+            try {
+                const response = await fetch(`${RAPIDAPI_ENDPOINT}?url=${encodeURIComponent(url)}`, {
+                    method: 'GET',
+                    headers: {
+                        'x-rapidapi-key': RAPIDAPI_KEY,
+                        'x-rapidapi-host': RAPIDAPI_HOST
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Gagal menghubungi API: ${response.statusText}`);
+                }
+                
+                const apiData = await response.json();
+                
+                // Pastikan data yang diterima valid
+                if (!apiData || !apiData.download_links) {
+                    throw new Error(apiData.message || 'Tidak ada link unduhan yang ditemukan. URL tidak didukung? 😔');
+                }
+
+                // Sukses
+                loadingState.classList.add('hidden');
+                videoResult.classList.remove('hidden');
+
+                // Isi detail video
+                videoThumbnail.src = apiData.thumbnail || 'https://via.placeholder.com/150?text=Video';
+                videoTitle.textContent = apiData.title || 'YouTube De (nul)';
+
+                // Isi tombol kecil di bawah judul (Contoh: Fapt loo, Download)
+                smallButtons.innerHTML = `
+                    <button class="bg-gray-200 text-gray-700 text-xs font-medium px-2 py-1 rounded">Fapt loo</button>
+                    <button class="bg-gray-200 text-gray-700 text-xs font-medium px-2 py-1 rounded">Download</button>
+                `;
+                
+                // Isi list Format Download (Tumpuk)
+                apiData.download_links.forEach((format, index) => {
+                    const label = `${format.quality || 'Unduh Quall Url'} Ed.Sing${30 + index} (${format.container || 'Container'})`;
+                    const linkButton = createDownloadButton(label, format.url);
+                    downloadFormats.appendChild(linkButton);
+                });
+
+            } catch (err) {
+                console.error('Error:', err);
+                loadingState.classList.add('hidden');
+                errorState.classList.remove('hidden');
+                errorMessage.textContent = `Terjadi kesalahan: ${err.message || 'Gagal memproses video.'} 😔`;
+            } finally {
+                downloadButton.disabled = false;
+                downloadButton.innerHTML = 'Download ✨';
+            }
+        });
+    </script>
+</body>
+</html>
