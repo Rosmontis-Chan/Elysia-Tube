@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💖 Elysia GoTube 💖</title>
+    
+    <style>
+        :root {
+            --pink-light: #fff0f5; /* Blushing Pink */
+            --pink-medium: #ffb6c1; /* Light Pink */
+            --pink-accent: #ff69b4; /* Hot Pink (Aksen Utama) */
+            --shadow-light: 0 6px 20px rgba(255, 182, 193, 0.6); /* Efek Glowing Lebih Kuat */
+            --smooth-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--pink-light); 
+            margin: 0;
+            padding: 20px 40px; /* Padding lebih besar untuk tampilan lebih lapang */
+            color: #333;
+            transition: var(--smooth-transition);
+        }
+
+        #header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: white;
+            border-radius: 25px; /* Lebih halus */
+            box-shadow: var(--shadow-light); 
+        }
+
+        h2 {
+            color: var(--pink-accent);
+            text-shadow: 1px 1px 4px rgba(255, 105, 180, 0.5); /* Efek Glowing pada Judul */
+            font-size: 2.2em; /* Judul lebih besar */
+            margin: 5px 0;
+        }
+
+        #search-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 50px;
+            max-width: 800px; /* Batasi lebar search agar lebih rapi di tengah */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #search-input {
+            flex-grow: 1;
+            padding: 18px; /* Input lebih besar */
+            border: 3px solid var(--pink-medium); /* Border lebih tebal */
+            border-radius: 30px; 
+            font-size: 18px; /* Font input lebih besar */
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+            transition: border-color 0.3s;
+        }
+
+        #search-input:focus {
+            border-color: var(--pink-accent);
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.6); /* Glowing Focus */
+        }
+
+        #search-button {
+            padding: 18px 30px; /* Tombol lebih besar */
+            background-color: var(--pink-accent);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px; 
+            font-weight: bold;
+            box-shadow: 0 5px 10px rgba(255, 105, 180, 0.4);
+            transition: var(--smooth-transition);
+        }
+
+        #search-button:hover {
+            background-color: #ffc0cb; 
+            color: var(--pink-accent);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 105, 180, 0.6);
+        }
+
+        /* Tampilan Hasil Video */
+        #results-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Ukuran kartu lebih besar */
+            gap: 30px;
+        }
+
+        .video-card {
+            background-color: white;
+            border-radius: 20px; /* Lebih halus */
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            cursor: pointer;
+            transition: var(--smooth-transition);
+        }
+
+        .video-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.7); 
+        }
+
+        .video-details {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .video-details h3 {
+            margin: 0;
+            font-size: 1.2em; /* Judul video lebih besar */
+            color: #555;
+            min-height: 50px;
+            overflow: hidden;
+        }
+
+        /* Loading Indicator (Sakura/Elysia) */
+        #loading-indicator {
+            display: none;
+            text-align: center;
+            padding: 80px;
+            font-size: 28px;
+            color: var(--pink-accent);
+            font-weight: bold;
+        }
+
+        .sakura-petal {
+            display: inline-block;
+            animation: spin 1.8s linear infinite;
+            font-size: 40px;
+            margin: 0 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Modal dan Player (Penyesuaian Ukuran) */
+        #player-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 182, 193, 0.6); 
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px); /* Blur lebih kuat */
+        }
+        
+        #player-iframe {
+            /* Ukuran iframe disesuaikan agar proporsional dan besar */
+            width: 960px; 
+            height: 540px;
+            max-width: 95vw;
+            max-height: 80vh;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.9);
+        }
+
+        /* Footer Copyright */
+        #footer {
+            text-align: center;
+            padding: 30px 0 10px;
+            margin-top: 50px;
+            color: var(--pink-accent);
+            font-size: 0.9em;
+            font-weight: bold;
+            border-top: 1px solid var(--pink-medium);
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            body {
+                padding: 20px;
+            }
+            #player-iframe {
+                width: 90vw;
+                height: 50.625vw; /* Pertahankan rasio 16:9 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="header">
+        <h2>🌸 Elysia GoTube 🌸</h2>
+        <p>Tampilan yang lembut, halus, dan elegan untuk nontonmu!</p>
+    </div>
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Cari video favoritmu...">
+        <button id="search-button">Cari</button>
+    </div>
+
+    <div id="loading-indicator">
+        <span class="sakura-petal">💖</span> Memuat data Elysia... <span class="sakura-petal">💖</span>
+    </div>
+
+    <div id="results-container">
+        <p style="text-align: center; color: var(--pink-accent); font-size: 1.1em;">Selamat datang di Elysia GoTube! Silakan cari video di atas.</p>
+    </div>
+
+    <div id="player-modal">
+        <span id="close-player">&times;</span>
+        <div id="player-content">
+            <iframe id="player-iframe" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div id="footer">
+        © 2025 All Rights Reserved, Elysia.
+    </div>
+
+    <script>
+        // *** GANTI DENGAN API KEY ANDA YANG SUDAH DIAMANKAN! ***
+        const API_KEY = 'AIzaSyCB5Mnl7g5quGxnbQIoiyCPjVkhaO6EZ7I'; 
+        
+        const SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
+        const resultsContainer = document.getElementById('results-container');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const playerModal = document.getElementById('player-modal');
+        const playerIframe = document.getElementById('player-iframe');
+        const closePlayer = document.getElementById('close-player');
+        const loadingIndicator = document.getElementById('loading-indicator');
+
+        // Fungsi utama untuk memanggil API YouTube
+        async function searchVideos(query) {
+            if (!query) return;
+
+            resultsContainer.innerHTML = '';
+            loadingIndicator.style.display = 'block';
+
+            const url = `${SEARCH_URL}?part=snippet&q=${query}&key=${API_KEY}&type=video&maxResults=12`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                loadingIndicator.style.display = 'none';
+                displayResults(data.items);
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                loadingIndicator.style.display = 'none';
+                resultsContainer.innerHTML = '<p style="color: var(--pink-accent);">❌ Gagal memuat. Pastikan API Key dan koneksi Anda benar!</p>';
+            }
+        }
+
+        function displayResults(videos) {
+            resultsContainer.innerHTML = '';
+            const validVideos = videos.filter(v => v.id.videoId);
+
+            if (validVideos.length === 0) {
+                resultsContainer.innerHTML = '<p style="color: var(--pink-accent);">Tidak ada video ditemukan 😢 Coba kata kunci lain.</p>';
+                return;
+            }
+
+            validVideos.forEach(video => {
+                const videoId = video.id.videoId;
+                const title = video.snippet.title;
+                // Menggunakan thumbnail 'high' untuk kualitas yang lebih baik, mendukung tampilan besar
+                const thumbnailUrl = video.snippet.thumbnails.high ? video.snippet.thumbnails.high.url : video.snippet.thumbnails.medium.url; 
+
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                card.innerHTML = `
+                    <img src="${thumbnailUrl}" alt="${title}">
+                    <div class="video-details">
+                        <h3>${title}</h3>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => playVideo(videoId));
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        // Fungsi untuk memutar video
+        function playVideo(videoId) {
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`; // rel=0 agar tidak menampilkan video terkait saat selesai
+            playerIframe.src = embedUrl;
+            playerModal.style.display = 'flex'; 
+        }
+
+        // Event Listeners
+        searchButton.addEventListener('click', () => {
+            searchVideos(searchInput.value);
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchVideos(searchInput.value);
+            }
+        });
+
+        closePlayer.addEventListener('click', () => {
+            playerModal.style.display = 'none';
+            playerIframe.src = ''; 
+        });
+
+        playerModal.addEventListener('click', (e) => {
+            if (e.target === playerModal) {
+                playerModal.style.display = 'none';
+                playerIframe.src = '';
+            }
+        });
+        
+        // Memuat video default saat pertama kali (tema Elysia)
+        searchVideos('video musik pop cerah'); 
+
+    </script>
+</body>
+</html>
