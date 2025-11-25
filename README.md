@@ -17,7 +17,7 @@ Tujuannya adalah menciptakan pengalaman menonton yang ringan dan cepat, sekaligu
 
 Anda dapat melihat tampilan langsung Elysia Tube dan mencoba fitur pencariannya di sini:
 
-> [**👉 KLIK DI SINI UNTUK MELIHAT LIVE DEMO ELYSIA TUBE**](LINK_DEMO_ANDA_DI_SINI)
+> [**LIVE DEMO ELYSIA TUBE**][https://elysia-tube.vercel.app/] 
 >
 > **(Ganti teks `LINK_DEMO_ANDA_DI_SINI` dengan URL live demo Anda, misalnya GitHub Pages atau hosting lain.)**
 
@@ -62,10 +62,6 @@ Anda memerlukan **YouTube Data API Key** dari Google Cloud Console.
 ### 4. Jalankan
 
 Buka file **`index.html`** langsung di *browser* Anda (klik dua kali pada file tersebut) dan *website* siap digunakan!
-
-## 📜 Lisensi
-
-Proyek ini dilisensikan di bawah **Lisensi MIT**.
 
 ---
 <p align="center">
