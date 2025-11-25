@@ -1,7 +1,8 @@
 # 🌸 Elysia Tube 🌸
+### Kloning Tampilan YouTube yang Lembut, Halus, dan Cerah
 
 <p align="center">
-  <img src="https://github.com/Rosmontis-Chan/Elysia-Tube/blob/main/ELYSIA-TUBE.PNG" alt="Elysia Tube Banner" style="width: 75%; border-radius: 15px; box-shadow: 0 5px 20px rgba(255, 105, 180, 0.4);">
+  <img src="https://raw.githubusercontent.com/Rosmontis-Chan/Elysia-Tube/main/Elysia-Tube%20Png" alt="Elysia Tube Banner" style="width: 100%; border-radius: 15px; box-shadow: 0 5px 20px rgba(255, 105, 180, 0.4);">
 </p>
 
 ---
@@ -68,5 +69,5 @@ Proyek ini dilisensikan di bawah **Lisensi MIT**.
 
 ---
 <p align="center">
-  Dibuat oleh Elysia.
+  Dibuat oleh **Elysia**.
 </p>
