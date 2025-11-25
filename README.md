@@ -19,7 +19,6 @@ Anda dapat melihat tampilan langsung Elysia Tube dan mencoba fitur pencariannya 
 
 > [**LIVE DEMO ELYSIA TUBE**][https://elysia-tube.vercel.app/] 
 >
-> **(Ganti teks `LINK_DEMO_ANDA_DI_SINI` dengan URL live demo Anda, misalnya GitHub Pages atau hosting lain.)**
 
 ## 🌟 Fitur Utama
 
